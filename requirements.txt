@@ -1,0 +1,4 @@
+fritzconnection
+numpy
+matplotlib
+python-dotenv
