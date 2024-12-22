@@ -40,10 +40,11 @@ def extract_json_values(json_file_path):
 data = extract_json_values(path)
 power = []
 temp = []
-
+name = ''
 if data:
     power = data['power_values']
     temp = data['tempereture_values']
+    name = data['device_name']
 
 ymin1 = 0
 ymax1 = max_power * scale
@@ -73,7 +74,7 @@ ax2.tick_params(axis='y', labelcolor='tab:red')
 ax2.set_ylim([ymin2, ymax2])
 
 # Titel hinzufügen
-plt.title('Balkonkraftwerk Leistung')
+plt.title(f'{name} Leistung')
 
 # Diagramm anzeigen
 plt.show()
