@@ -46,9 +46,19 @@ if data:
     temp = data['tempereture_values']
     name = data['device_name']
 
+def findlowest(array):
+    lowest = array[0]
+    for i in array:
+        if i < lowest:
+            lowest = i
+    return lowest
+
 ymin1 = 0
 ymax1 = max_power * scale
-ymin2 = 0
+if findlowest(temp) < 0:
+    ymin2 = findlowest(temp) - 2
+else:
+    ymin2 = 0
 ymax2 = max_temp * scale
 
 # Create x-axis values in hours
