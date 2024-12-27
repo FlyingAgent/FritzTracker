@@ -8,6 +8,7 @@ import numpy as np
 import argparse
 
 override_power_buffer = 10
+override_temp_buffer = 2
 
 def parse_arguments():
     parser = argparse.ArgumentParser(description='Process power and temperature data')
@@ -21,6 +22,8 @@ def parse_arguments():
                         help='Scale factor (0-1, default: 1.0)')
     parser.add_argument('--override-max-power', type=bool, default=False,
                         help=f'Override the maximum power value with the highest value in the data and an additional {override_power_buffer} watts of buffer (default: false, write True with a capital T to use this feature)')
+    parser.add_argument('--override-max-temp', type=bool, default=False,
+                        help=f'Override the maximum temperature value with the highest value in the data and an additional {override_temp_buffer} °C of buffer (default: false, write True with a capital T to use this feature)')
     return parser.parse_args()
 
 args = parse_arguments()
@@ -29,6 +32,7 @@ max_power = args.max_power
 max_temp = args.max_temp
 scale = args.scale
 override_max_power = args.override_max_power
+override_max_temp = args.override_max_temp
 
 def extract_json_values(json_file_path):
     try:
@@ -75,7 +79,10 @@ if findlowest(temp) < 0:
     ymin2 = findlowest(temp) - 2
 else:
     ymin2 = 0
+
 ymax2 = max_temp * scale
+if override_max_temp == True:
+    ymax2 = findhighest(temp) + override_temp_buffer
 
 # Create x-axis values in hours
 hours = np.arange(len(power)) / 60  # Convert minutes to hours
