@@ -7,6 +7,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 import argparse
 
+override_power_buffer = 10
+
 def parse_arguments():
     parser = argparse.ArgumentParser(description='Process power and temperature data')
     parser.add_argument('--path', type=str, required=True, 
@@ -17,6 +19,8 @@ def parse_arguments():
                         help='Maximum temperature value (default: 40)')
     parser.add_argument('--scale', type=float, default=1.0,
                         help='Scale factor (0-1, default: 1.0)')
+    parser.add_argument('--override-max-power', type=bool, default=False,
+                        help=f'Override the maximum power value with the highest value in the data and an additional {override_power_buffer} watts of buffer (default: false, write True with a capital T to use this feature)')
     return parser.parse_args()
 
 args = parse_arguments()
@@ -24,6 +28,7 @@ path = args.path
 max_power = args.max_power
 max_temp = args.max_temp
 scale = args.scale
+override_max_power = args.override_max_power
 
 def extract_json_values(json_file_path):
     try:
@@ -53,8 +58,19 @@ def findlowest(array):
             lowest = i
     return lowest
 
+def findhighest(array):
+    highest = array[0]
+    for i in array:
+        if i > highest:
+            highest = i
+    return highest
+
 ymin1 = 0
 ymax1 = max_power * scale
+
+if override_max_power == True:
+    ymax1 = findhighest(power) + override_power_buffer
+
 if findlowest(temp) < 0:
     ymin2 = findlowest(temp) - 2
 else:
