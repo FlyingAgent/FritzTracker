@@ -55,11 +55,11 @@ def extract_date(date_string):
     return date_string.split('-')
 
 #Find all files between two dates
-def find_all_files(current_d, current_m, current_y, end_d, end_m, end_y):
+def find_all_files(current_d, current_m, current_y, end_d, end_m, end_y, prefix, device):
     files = []
     c = True
     while c == True:
-        path = f"testdata/data_Balkonkraftwerk_{current_y}-{current_m}-{current_d}.json"
+        path = f"{prefix}_{device}_{current_y}-{current_m}-{current_d}.json"
         # Überprüfen, ob Datei
         if(extract_json_values(path) != None):
             print("File found: " + path)
@@ -139,7 +139,7 @@ end_y = int(end_date[0])
 print(f"Start date: {current_d}.{current_m}.{current_y}")
 print(f"End date: {end_d}.{end_m}.{end_y}")
 
-files = find_all_files(current_d, current_m, current_y, end_d, end_m, end_y)
+files = find_all_files(current_d, current_m, current_y, end_d, end_m, end_y, prefix, device)
 
 data_power = []
 data_temp = []
