@@ -59,7 +59,20 @@ def find_all_files(current_d, current_m, current_y, end_d, end_m, end_y, prefix,
     files = []
     c = True
     while c == True:
+        temp_current_d = current_d
+        temp_current_m = current_m
+
+        if current_d < 10:
+            current_d = f"0{current_d}"
+        if current_m < 10:
+            current_m = f"0{current_m}"
+
         path = f"{prefix}_{device}_{current_y}-{current_m}-{current_d}.json"
+
+        current_d = temp_current_d
+        current_m = temp_current_m
+
+
         # Überprüfen, ob Datei
         if(extract_json_values(path) != None):
             print("File found: " + path)
